@@ -18,14 +18,14 @@ export async function postCategories(req, res) {
 
         const existentCategory = await connection.query(`
             SELECT * FROM categories 
-                WHERE name='$1' 
+                WHERE name=$1
                 LIMIT 1
         `, [category]);
         if (existentCategory) return res.sendStatus(409);
 
         await connection.query(`
             INSERT INTO categories (name) 
-                VALUES ('$1')
+                VALUES ($1)
         `, [category]);
         res.sendStatus(201);
     } catch (e) {

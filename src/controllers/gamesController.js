@@ -9,7 +9,7 @@ export async function getGames(req, res) {
                 SELECT games.*, categories.name as "categoryName" FROM games
                     JOIN categories
                     ON games."categoryId"=categories.id
-                    WHERE LOWER(games.name) LIKE '$1%'
+                    WHERE LOWER(games.name) LIKE $1%
             `, [query]);
             res.status(200).send(gamesList.rows);
         }
@@ -42,7 +42,7 @@ export async function postGames(req, res) {
 
         await connection.query(`
             INSERT INTO games (name, image, stockTotal, categoryId, pricePerDay) 
-                VALUES ('$1', '$2', '$3', '$4', '$5')
+                VALUES ($1, $2, $3, $4, $5)
         `, [name, image, parseInt(stockTotal), categoryId, parseInt(pricePerDay)]);
         res.sendStatus(201);
     } catch(e) {
