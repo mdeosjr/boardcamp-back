@@ -5,7 +5,7 @@ const customersSchema = joi.object({
     name: joi.string().required(),
     phone: joi.string().alphanum().min(10).max(11).required(),
     cpf: joi.string().alphanum().length(11).required(),
-    birthday: joi.date().min('now').required()
+    birthday: joi.date().required()
 });
 
 export default async function validateCustomers(req, res, next) {

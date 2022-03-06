@@ -83,7 +83,7 @@ export async function finishRental(req, res) {
 
     try {
         const result = await connection.query(`
-            SELECT rentals*, games.pricePerDay AS "pricePerDay" FROM rentals
+            SELECT rentals.*, games."pricePerDay" AS "pricePerDay" FROM rentals
                 JOIN games ON games.id=rentals."gameId"
                 WHERE rentals.id=$1
         `, [id]);
