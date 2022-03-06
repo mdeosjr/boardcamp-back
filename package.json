@@ -18,7 +18,9 @@
     "dayjs": "^1.10.8",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "pg": "^8.7.3"
+    "joi": "^17.6.0",
+    "pg": "^8.7.3",
+    "sqlstring": "^2.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

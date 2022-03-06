@@ -42,13 +42,6 @@ export async function postCustomers (req, res) {
     const { name, phone, cpf, birthday } = req.body;
 
     try {
-        const existentCustomer = await connection.query(`
-            SELECT * FROM customers 
-                WHERE cpf=$1
-                LIMIT 1
-        `, [cpf]);
-        if (existentCustomer) return res.sendStatus(409);
-
         await connection.query(`
             INSERT INTO customers (name, phone, cpf, birthday)
                 VALUES ($1, $2, $3, $4)

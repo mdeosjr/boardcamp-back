@@ -31,15 +31,6 @@ export async function postGames(req, res) {
     const { name, image, stockTotal, categoryId, pricePerDay } = req.body;
 
     try {
-        if (name === '') return res.sendStatus(400);
-
-        const existentGame = await connection.query(`
-            SELECT * FROM games 
-                WHERE name='${name}' 
-                LIMIT 1
-        `);
-        if(existentGame) return res.sendStatus(409);
-
         await connection.query(`
             INSERT INTO games (name, image, stockTotal, categoryId, pricePerDay) 
                 VALUES ($1, $2, $3, $4, $5)

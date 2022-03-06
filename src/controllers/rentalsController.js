@@ -1,7 +1,19 @@
 import connection from '../db.js';
 import dayjs from 'dayjs';
+import sqlstring from 'sqlstring';
 
 export async function getRentals(req, res) {
+    const { customerId, gameId } = req.query;
+    let WHERE = '';
+
+    if (customerId) {
+        WHERE = `WHERE customers.id=${sqlstring.escape(customerId)}`;
+    }
+
+    if (gameId) {
+        WHERE = `WHERE games.id=${sqlstring.escape(gameId)}`;
+    }
+
     try {
         const rentalsArray = await connection.query({
             text: `
@@ -14,6 +26,7 @@ export async function getRentals(req, res) {
                     JOIN customers ON customers.id=rentals."customerId"
                     JOIN games ON games.id=rentals."gameId"
                     JOIN categories ON categories.id=games."categoryId"
+                    ${WHERE}
             `,
             rowMode: 'array'
         });
@@ -81,24 +94,10 @@ export async function finishRental(req, res) {
 
         await connection.query(`
             UPDATE rentals 
-                SET "customerId"=$1, 
-                    "gameId"=$2, 
-                    "rentDate"=$3, 
-                    "daysRented"=$4, 
-                    "returnDate"=$5, 
-                    "originalPrice"=$6, 
-                    "delayFee"=$7
-                WHERE id=$8
-        `, [
-            rent.customerId, 
-            rent.gameId, 
-            rent.rentDate, 
-            rent.daysRented, 
-            returnDate, 
-            rent.originalPrice, 
-            delayFee, 
-            id
-        ]);
+                SET "returnDate"=$1,  
+                    "delayFee"=$2
+                WHERE id=$3
+        `, [returnDate, delayFee, id]);
 
         res.sendStatus(200);
     } catch (e) { 
