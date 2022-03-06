@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { getRentals, postRentals, finishRental, deleteRental } from '../controllers/rentalsController.js';
-import { validateRentals, validateId } from '../middlewares/validateRentals.js';
+import validateRentals from '../middlewares/validateRentals.js';
+import validateId from '../middlewares/validateId.js';
 
 const rentalsRouter = Router();
 
@@ -11,3 +12,4 @@ rentalsRouter.post('/rentals/:id/return', finishRental);
 rentalsRouter.delete('/rentals/:id', deleteRental);
 
 export default rentalsRouter;
+

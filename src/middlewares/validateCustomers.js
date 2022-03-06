@@ -17,7 +17,7 @@ export default async function validateCustomers(req, res, next) {
                 WHERE cpf=$1
                 LIMIT 1
         `, [req.body.cpf]);
-    if (existentCustomer.rows.length === 0) return res.sendStatus(409);
+    if (existentCustomer.rows.length !== 0) return res.sendStatus(409);
 
     next();
 }
