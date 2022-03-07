@@ -1,8 +1,17 @@
 import connection from '../db.js';
 
 export async function getCustomers (req, res) {
-    const { cpf } = req.query;
-    console.log(cpf);
+    const { offset, limit, cpf } = req.query;
+    let OFFSET = '';
+    let LIMIT = '';
+
+    if (offset) {
+        OFFSET = `OFFSET ${sqlstring.escape(offset)}`;
+    }
+
+    if (limit) {
+        LIMIT = `LIMIT ${sqlstring.escape(limit)}`
+    }
 
     try {
         if (cpf) {
@@ -13,7 +22,11 @@ export async function getCustomers (req, res) {
             return res.status(200).send(customersList.rows);
         }
 
-        const customersList = await connection.query('SELECT * FROM customers');
+        const customersList = await connection.query(`
+            SELECT * FROM customers
+            ${OFFSET}
+            ${LIMIT}    
+        `);
         res.status(200).send(customersList.rows);
     } catch (e) {
         console.error(e);

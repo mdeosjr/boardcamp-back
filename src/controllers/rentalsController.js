@@ -3,8 +3,10 @@ import dayjs from 'dayjs';
 import sqlstring from 'sqlstring';
 
 export async function getRentals(req, res) {
-    const { customerId, gameId } = req.query;
+    const { customerId, gameId, offset, limit } = req.query;
     let WHERE = '';
+    let OFFSET = '';
+    let LIMIT = '';
 
     if (customerId) {
         WHERE = `WHERE customers.id=${sqlstring.escape(customerId)}`;
@@ -12,6 +14,14 @@ export async function getRentals(req, res) {
 
     if (gameId) {
         WHERE = `WHERE games.id=${sqlstring.escape(gameId)}`;
+    }
+
+    if (offset) {
+        OFFSET = `OFFSET ${sqlstring.escape(offset)}`;
+    }
+
+    if (limit) {
+        LIMIT = `LIMIT ${sqlstring.escape(limit)}`
     }
 
     try {
@@ -27,6 +37,8 @@ export async function getRentals(req, res) {
                     JOIN games ON games.id=rentals."gameId"
                     JOIN categories ON categories.id=games."categoryId"
                     ${WHERE}
+                    ${OFFSET}
+                    ${LIMIT}
             `,
             rowMode: 'array'
         });

@@ -23,5 +23,13 @@ export default async function validateRentals(req, res, next) {
     `, [req.body.gameId]);
     if (existentGame.rows.length === 0) return res.sendStatus(400);
 
+    const availableGames = await connection.query(`
+        SELECT rentals.*, games."stockTotal"
+            FROM rentals
+            JOIN games ON games.id=rentals."gameId"
+            WHERE rentals."returnDate" IS NULL
+    `)
+    if (availableGames.rows.length > availableGames.rows[0].stockTotal) return res.sendStatus(400); 
+
     next();
 }
