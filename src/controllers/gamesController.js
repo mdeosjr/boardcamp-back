@@ -21,7 +21,7 @@ export async function getGames(req, res) {
                     ON games."categoryId"=categories.id
                     WHERE LOWER(games.name) LIKE $1
             `, [`${name}%`]);
-            res.status(200).send(gamesList.rows);
+            return res.status(200).send(gamesList.rows);
         }
 
         const gamesList = await connection.query(`

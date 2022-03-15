@@ -29,6 +29,8 @@ export default async function validateRentals(req, res, next) {
             JOIN games ON games.id=rentals."gameId"
             WHERE rentals."returnDate" IS NULL
     `)
+    
+    if (availableGames.rowCount === 0) return next();
     if (availableGames.rows.length > availableGames.rows[0].stockTotal) return res.sendStatus(400); 
 
     next();
